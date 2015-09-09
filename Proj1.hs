@@ -1,5 +1,8 @@
 
-
+-- Declarative Programming COMP90048 : Semester 1
+-- Project 1 : Secret Chord
+-- Author : Ryan O'Kane 
+-- Student Number : 587723
 module Proj1 (initialGuess, nextGuess, GameState) where
 
     import Data.List
