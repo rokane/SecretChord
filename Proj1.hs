@@ -7,6 +7,7 @@ module Proj1 (initialGuess, nextGuess, GameState) where
 
     import Data.List
 
+    -- Stores possible remaining options for the guess
     type GameState = [[String]]
 
     -- Returns the initial guess and initial GameState with all possible guesses
@@ -20,10 +21,11 @@ module Proj1 (initialGuess, nextGuess, GameState) where
     -- Takes in previous guess, GameState and feedback from state and uses it
     -- To decide what to eliminate from possible guesses
     nextGuess :: ([String],GameState) -> (Int,Int,Int) -> ([String],GameState) 
-    nextGuess (guess, gameState) feedback = (newState !! ((length newState) `div` 2), newState) 
+    nextGuess (guess, gameState) feedback = (newGuess, removeGuess newGuess newState) 
         where
             newState = removeIncompatible (guess, gameState) feedback
-
+            newGuess = newState !! ((length newState) `div` 2)
+            
     -- Removes any incompatible guesses from the GameState given the feedback
     -- Checks remaining guesses to see if feedback recieved is the same
     -- If feedback is the same then the guess is still a valid answer
@@ -35,8 +37,12 @@ module Proj1 (initialGuess, nextGuess, GameState) where
         | otherwise                     = removeIncompatible (guess, xs) (p, n, o)
         where (p', n', o') = getFeedback guess x
 
+    -- Function inputs two lists 
+    -- Returns the cartesion product of 2 given lists 
     cartProd xs ys = [(x:y) | x <- xs, y <- ys]
 
+    -- Input a single list and an integer
+    -- Generates all possible combinations of that list to the size of the int
     sublists _ 0 = [[]]
     sublists [] _ = []
     sublists (x:xs) n = sublists xs n ++ map (x:) (sublists xs $ n - 1)
@@ -87,34 +93,6 @@ module Proj1 (initialGuess, nextGuess, GameState) where
     compElem x list1 list2 
         | (list1 !! x) == (list2 !! x)  = True
         | otherwise                     = False
-
-    --intersectExact :: (Eq a) => [a] -> [a] -> [a]
-    --intersectExact a b = nub $ intersect a b
-
-    ---- Returns a list containing the first element of each string in the given list
-    --getFirstElems :: [String] -> [String]
-    --getFirstElems [] = []
-    --getFirstElems (x:xs) = [head x] : getFirstElems xs
-
-    ---- Returns a list containing the last element of each string in the given list
-    --getLastElems :: [String] -> [String]
-    --getLastElems [] = []
-    --getLastElems (x:xs) = tail x : getLastElems xs
-
-    --   -- Returns number of correct notes between target and guess
-    --correctNote1 :: [String] -> [String] -> Int
-    --correctNote1 [] _ = 0
-    --correctNote1 guess target = length $ intersectExact (getFirstElems guess) (getFirstElems target)
-
-    ---- Returns number of correct octaves between target and guess
-    --correctOctave1 :: [String] -> [String] -> Int
-    --correctOctave1 [] _ = 0
-    --correctOctave1 guess target = length $ intersectExact (getLastElems guess) (getLastElems target)
-
-
-
-
-
 
 
 
